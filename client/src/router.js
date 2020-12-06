@@ -17,6 +17,11 @@ export default new Router({
       path: "/about",
       name: "about",
       component: () => import("./views/About.vue")
+    },
+    {
+      path: "/notes",
+      name: "notes",
+      component: () => import("./views/Notes.vue")
     }
   ]
 });

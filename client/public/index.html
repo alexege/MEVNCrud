@@ -5,13 +5,140 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <title>Default template</title>
+    <script src="https://kit.fontawesome.com/75bc20b7e6.js" crossorigin="anonymous"></script>
+    <title>Vue Practice Project</title>
   </head>
   <body>
     <noscript>
       <strong>We're sorry but it doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
-    <div id="app"></div>
+
+    <div id="mySidenav" class="sidenav">
+      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+      <a href="/">Home</a>
+      <a href="/about">About</a>
+      <a href="/notes">Notes</a>
+    </div>
+    
+    <div id="main">
+      <span style="font-size:30px;cursor:pointer" onclick="toggleSideNav()"><i class="far fa-caret-square-right" id="toggleSideNavButton"></i></span>
+      <h2 style="text-align: center; color: white; font-size: 30px;">Vue Practice Project</h2>
+      <div id="app"></div>
+    </div>
     <!-- built files will be auto injected -->
   </body>
 </html>
+<script>
+
+  function toggleSideNav() {
+    let showSideNav = localStorage.getItem("showSideNav");
+    let navToggleButton = document.getElementById("toggleSideNavButton");
+    console.log("showSideNav: ", showSideNav);
+    
+    if(showSideNav == "false"){
+      navToggleButton.classList.add("fa-caret-square-left");
+      navToggleButton.classList.remove("fa-caret-square-right");
+      document.getElementById("mySidenav").style.width = "20vw";
+      document.getElementById("main").style.marginLeft= "20vw";
+      
+      localStorage.setItem("showSideNav", "true");
+    } else {
+      navToggleButton.classList.remove("fa-caret-square-left");
+      navToggleButton.classList.add("fa-caret-square-right");
+      document.getElementById("mySidenav").style.width = "0";
+      document.getElementById("main").style.marginLeft= "0";
+      
+      localStorage.setItem("showSideNav", "false");
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    
+    let showSideNav = localStorage.getItem("showSideNav");
+    let navToggleButton = document.getElementById("toggleSideNavButton");
+
+    //If showSideNav is null, create a localStorage value for it
+    if(showSideNav == null){ 
+      console.log("showSideNav is null."); 
+      localStorage.setItem("showSideNav", "false");
+      document.getElementById("mySidenav").style.width = "0";
+      document.getElementById("main").style.marginLeft= "0";
+
+      navToggleButton.classList.remove("fa-caret-square-left");
+      navToggleButton.classList.add("fa-caret-square-right");
+    //If showSideNav is false, hide nav bar
+    } else if (showSideNav == "false"){
+      console.log("showSideNav is false.");
+      document.getElementById("mySidenav").style.width = "0";
+      document.getElementById("main").style.marginLeft= "0";
+
+      navToggleButton.classList.remove("fa-caret-square-left");
+      navToggleButton.classList.add("fa-caret-square-right");
+    //If showSideNav is true, show nav bar
+    } else {
+      console.log("showSideNav is true.");
+      document.getElementById("mySidenav").style.width = "20vw";
+      document.getElementById("main").style.marginLeft= "20vw";
+
+      navToggleButton.classList.remove("fa-caret-square-right");
+      navToggleButton.classList.add("fa-caret-square-left");
+    }
+
+  });
+
+</script>
+<style>
+  body {
+    background-color:#15293d;
+    font-family: "Lato", sans-serif;
+}
+
+i {
+  color: white;
+}
+
+.sidenav {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #111;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+}
+
+.sidenav a {
+  /* padding: 8px 8px 8px 32px; */
+  padding: 8px 8px 8px 45px;
+  text-decoration: none;
+  font-size: 20px;
+  color: #42b983;
+  display: block;
+  transition: 0.3s;
+}
+
+.sidenav a:hover {
+  color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+#main {
+  transition: margin-left .5s;
+  padding: 16px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+</style>
