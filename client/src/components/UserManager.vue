@@ -54,6 +54,14 @@
         </tr>
       </table>
 
+      <ul>
+        <li v-for="user in this.data" :key="user._id">
+          Name:{{ user.firstName }}{{ user.lastName }} <br>
+          Age: {{ user.age }} <br>
+          Notes: {{ user.notes }}
+        </li>
+      </ul>
+
       <edit-user v-if="showEditMenu" :user-id="editUser._id" @show-edit-menu="toggleEditMenu" />
 
     </div>
@@ -92,7 +100,7 @@ export default {
         "lastName": this.lastName,
         "age": this.age
       };
-      fetch("http://localhost:9000/api", {
+      fetch("http://localhost:9000/api/users", {
         method: "POST",
         headers: { "Content-Type":"application/json" },
         body: JSON.stringify(postData)
@@ -126,7 +134,7 @@ export default {
     
     // Get all users
     getUsers() {
-      fetch("http://localhost:9000/api")
+      fetch("http://localhost:9000/api/users")
       .then(res => res.json())
       .then(data => {
         this.data = data;
@@ -135,7 +143,7 @@ export default {
 
     // Delete User
     onDelete(id) {
-      fetch("http://localhost:9000/api/" + id, {
+      fetch("http://localhost:9000/api/users/" + id, {
         method: "DELETE",
         headers: { "Content-Type":"application/json" },
       })
@@ -155,7 +163,7 @@ export default {
         lastName: this.edit_last_name,
         age: this.edit_age
       }
-      fetch(`http://localhost:9000/api/${id}`, {
+      fetch(`http://localhost:9000/api/users/${id}`, {
         method: "PUT",
         headers: { "Content-Type":"application/json" },
         body: JSON.stringify(data)
@@ -173,7 +181,7 @@ export default {
     // Open Edit Form
     onEdit(id) {
       this.showEditMenu = false;
-      fetch(`http://localhost:9000/api/${id}`)
+      fetch(`http://localhost:9000/api/users/${id}`)
       .then((res) => res.json())
       .then((data) => {
         this.showEditMenu = true;

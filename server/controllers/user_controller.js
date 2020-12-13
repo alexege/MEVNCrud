@@ -1,6 +1,7 @@
 'use strict';
 
 const User = require('../models/user_schema');
+const Note = require('../models/note_schema');
 
 const createData = (req, res) => {
   User.create(req.body)
@@ -18,6 +19,17 @@ const createData = (req, res) => {
       }
     });
 };
+
+const getAllNotes = (req, res) => {
+  Note.find()
+  .then((data) => {
+    res.status(200).json(data);
+  })
+  .catch((err) => {
+    console.error(err);
+    res.status(500).json(err);
+  })
+}
 
 const readData = (req, res) => {
   User.find()
@@ -93,4 +105,5 @@ module.exports = {
   readData,
   updateData,
   deleteData,
+  getAllNotes
 };

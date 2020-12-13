@@ -1,20 +1,16 @@
 <template>
     <div class="notes">
-        Notes Page
-
-        <table>
-            <tr>
-                <th>title</th>
-                <th>title</th>
-                <th>title</th>
-            </tr>
-            <tbody>
-                <tr>
-                    <td>Item</td>
-                    <td>Item</td>
-                    <td>Item</td>
-                </tr>
-            </tbody>
-        </table>
+        <NotesManager />
     </div>
 </template>
+
+<script>
+import NotesManager from '../components/NotesManager.vue';
+
+export default {
+    name: "notes",
+    components: {
+        NotesManager
+    }
+};
+</script>

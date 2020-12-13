@@ -14,6 +14,10 @@ const userSchema = new Schema(
       type: Number,
       required: [true, 'age field is required'],
     },
+    notes: [{
+      type: Schema.Types.ObjectId,
+      ref: "Note",
+    }]
   },
   { timestamps: true },
 );

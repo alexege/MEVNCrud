@@ -33,7 +33,6 @@
   function toggleSideNav() {
     let showSideNav = localStorage.getItem("showSideNav");
     let navToggleButton = document.getElementById("toggleSideNavButton");
-    console.log("showSideNav: ", showSideNav);
     
     if(showSideNav == "false"){
       navToggleButton.classList.add("fa-caret-square-left");
@@ -50,6 +49,10 @@
       
       localStorage.setItem("showSideNav", "false");
     }
+  }
+  
+  function closeNav() {
+    toggleSideNav();
   }
 
   document.addEventListener("DOMContentLoaded", function(){

@@ -37,7 +37,7 @@ export default {
         //Get User
         fetchUser() {
             console.log("Fetching User!");
-            fetch(`http://localhost:9000/api/${this.userId}`, {
+            fetch(`http://localhost:9000/api/users/${this.userId}`, {
                 method: "GET"
             })
             .then((res) => res.json())
@@ -59,7 +59,7 @@ export default {
                 lastName: this.user.lastName,
                 age: this.user.age
             }
-            fetch("http://localhost:9000/api/" + this.userId, {
+            fetch("http://localhost:9000/api/users/" + this.userId, {
                 method: "PUT",
                 headers: { "Content-Type":"application/json" },
                 body: JSON.stringify(data)
