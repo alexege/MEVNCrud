@@ -7,7 +7,7 @@ const Note = require('../models/note_schema');
 const createNote = (req, res) => {
   Note.create(req.body)
     .then((data) => {
-      console.log('New Note Created!', data);
+      // console.log('New Note Created!', data);
       res.status(201).json(data);
     })
     .catch((err) => {
@@ -24,10 +24,7 @@ const createNote = (req, res) => {
 const getAllNotes = (req, res) => {
   Note.find()
     .then((data) => {
-      console.log("res:", res);
       res.status(200).json(data);
-      console.log("res:", res);
-      console.log("data:", data);
     })
     .catch((err) => {
       console.error(err);
@@ -35,15 +32,15 @@ const getAllNotes = (req, res) => {
     });
 };
 
-// const getNote = (req, res) => {
-//   Note.findById(req.params.id)
-//   .then((data) => {
-//     return data;
-//   })
-//   .then((data) => {
-//     console.log("Found Note: ", data);
-//     res.status(200).json(data);
-//   })
+const getNote = (req, res) => {
+  Note.findById(req.params.id)
+  .then((data) => {
+    return data;
+  })
+  .then((data) => {
+    console.log("Found Note: ", data);
+    res.status(200).json(data);
+  })
 
 //   Note.findById(id, function (err, docs) { 
 //     if (err){ 
@@ -53,27 +50,28 @@ const getAllNotes = (req, res) => {
 //         console.log("Result : ", docs); 
 //     } 
 // }); 
-// }
+}
 
-// const updateNote = (req, res) => {
-//   Note.findByIdAndUpdate(req.params.id, req.body, {
-//     useFindAndModify: false,
-//     new: true,
-//   })
-//     .then((data) => {
-//       console.log('Note updated!');
-//       res.status(201).json(data);
-//     })
-//     .catch((err) => {
-//       if (err.name === 'ValidationError') {
-//         console.error('Error Validating!', err);
-//         res.status(422).json(err);
-//       } else {
-//         console.error(err);
-//         res.status(500).json(err);
-//       }
-//     });
-// };
+const updateNote = (req, res) => {
+  console.log("Updating note: ", req.params.id);
+  Note.findByIdAndUpdate(req.params.id, req.body, {
+    useFindAndModify: false,
+    new: true,
+  })
+    .then((data) => {
+      console.log('Note updated!');
+      res.status(201).json(data);
+    })
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        console.error('Error Validating!', err);
+        res.status(422).json(err);
+      } else {
+        console.error(err);
+        res.status(500).json(err);
+      }
+    });
+};
 
 const deleteNote = (req, res) => {
   Note.findById(req.params.id)
@@ -101,8 +99,8 @@ const deleteNote = (req, res) => {
 module.exports = {
   createNote,
   getAllNotes,
-  // getNote,
-  // updateNote,
+  getNote,
+  updateNote,
   deleteNote,
   // test
 };

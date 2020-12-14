@@ -17,7 +17,7 @@
             </li>
             <li>
                 <label for="">Content:</label>
-                <input type="text" v-model="content">
+                <textarea name="content" id="content" cols="30" rows="10" v-model="content"></textarea>
             </li>
             <li>
                 <label for="">Author:</label>
@@ -33,69 +33,23 @@
         </ul>
         </form>
 
-        <!-- <h2>Notes</h2>
-        <table>
-            <tr>
-                <th>Title</th>
-                <th>Category</th>
-                <th>Content</th>
-                <th>Author</th>
-            </tr>
-            <tbody>
-                <tr v-for="(note, index) in allNotes" :key="index">
-                    <td>{{note.title}}</td>
-                    <td>{{note.category}}</td>
-                    <td>{{note.content}}</td>
-                    <td>{{note.author}}</td>
-                </tr>
-            </tbody>
-        </table> -->
-
-    <h2>Users</h2>
-    <table style="margin: 0 auto;">
-        <tbody>
-        <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Age</th>
-        </tr>
-        <tr v-for="user in this.users" :key="user._id">
-          <td>{{ user.firstName }}</td>
-          <td>{{ user.lastName }}</td>
-          <td>{{ user.age }}</td>
-        </tr>
-        </tbody>
-    </table>
-
     <h2>Notes</h2>
-    <table style="margin: 0 auto;">
-        <tbody>
-            <tr>
-                <th>Id:</th>
-                <th>Title:</th>
-                <th>Category:</th>
-                <th>Content:</th>
-                <th>AuthorId:</th>
-                <th>Actions:</th>
-            </tr>
-            <tr v-for="note in allNotes" :key="note._id">
-                <td>{{ note._id }}</td>
-                <td>{{ note.title }}</td>
-                <td>{{ note.category }}</td>
-                <td>{{ note.content }}</td>
-                <td>{{ note.author }}</td>
-                <td>
-                    <a @click="onEdit(note._id)">
-                    <i class="fas fa-edit"></i>
-                    </a>
-                    &nbsp;
-                    <a @click="onDelete(note._id)">
-                    <i class="fas fa-trash-alt"></i>
-                    </a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+
+    <div class="notes">
+        <div class="note" v-for="note in allNotes" :key="note._id">
+            <h2>{{ note.title }}</h2>
+            <!-- <select v-model="category" class="noteCategory">
+                <option v-for="category in categories" :key="category.name" >
+                    {{ category.name }}
+                </option>
+            </select> -->
+            <p>{{ note.category }}</p>
+            <textarea name="" id="" class="noteContent" cols="30" rows="6" v-model="note.content" @blur="saveChanges(note._id, $event)"></textarea>
+            <a @click="onDelete(note._id)">
+                <i class="fas fa-trash-alt"></i>
+            </a>
+        </div>
+    </div>
 
     </div>
 </template>
@@ -105,20 +59,18 @@ export default {
     data() {
         return {
             allNotes: null,
+            note: null,
             users: null,
             title: null,
             category: null,
             categories: [
-                {
-                    name: "Books"
-                },
-                {
-                    name: "CDS"
-                }
+                {name: "Books"},
+                {name: "CDS"}
             ],
             content: null,
             author: null,
-            authors: null
+            authors: null,
+            editNote: null
         }
     },
     methods: {
@@ -137,7 +89,6 @@ export default {
             })
             .then(res => res.json())
             .then(data => {
-                //TODO do something after adding a new note
                 this.allNotes = data;
                 this.getNotes();
             })
@@ -151,11 +102,21 @@ export default {
                 this.allNotes = data;
             })
         },
+        getNote(noteId) {
+            fetch(`http://localhost:9000/api/notes/${noteId}`)
+            .then(res => res.json())
+            .then(data => {
+                this.editNote = data;
+            })
+            .catch((err) => {
+                console.err(err);
+                console.log("Error:", err);
+            })
+        },
         getUsers() {
             fetch("http://localhost:9000/api/users")
             .then(res => res.json())
             .then(data => {
-                // this.notes = data;
                 this.authors = data;
                 this.users = data;
             })
@@ -164,16 +125,6 @@ export default {
                 console.log("Error:", err);
             })
         },
-        // getAllNotes() {
-        //     console.log("Get all notes");
-        //     fetch("http://localhost:9000/api/getNotes")
-        //     .then(res => res.json())
-        //     .then(data => {
-        //         console.log("Do something");
-        //         //TODO
-        //     })
-        //     .catch(err => console.log("error:", err));
-        // }
         // Delete User
         onDelete(id) {
         fetch("http://localhost:9000/api/notes/" + id, {
@@ -188,11 +139,32 @@ export default {
                 console.log("error:", err);
             })
         },
+        saveChanges(noteId, event) {
+            const noteContent = {
+                content: event.target.value
+            }
+            fetch(`http://localhost:9000/api/notes/${noteId}`, {
+                method: "PUT",
+                headers: { "Content-Type":"application/json" },
+                body: JSON.stringify(noteContent)
+            })
+                .then(res => res.json())
+                .then(data => {
+                    this.getNotes();
+                })
+                .catch(err => {
+                    console.log("error:", err);
+                })
+        }
     },
+    // computed: {
+    //     filteredOptions(){
+    //         return this.categories;
+    //     }
+    // },
     created() {
         this.getUsers();
         this.getNotes();
-        // this.getAllNotes();
     }
 }
 </script>
@@ -206,5 +178,32 @@ table td {
 }
 h2 {
     color:#42b983;
+}
+
+/* Note */
+.note {
+    border: 2px solid white;
+    background-color:rgba(3, 83, 110, 0.5);
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    max-width: 960px;
+    margin: 0 auto;
+}
+.note:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+.noteCategory {
+    display: block;
+    margin: 0 auto;
+    width: 60%;
+}
+.noteContent {
+    display: block;
+    margin: 0 auto;
+    width: 60%;
+}
+.note textarea {
+    background-color: transparent;
+    border: none;
+    color: white;
 }
 </style>

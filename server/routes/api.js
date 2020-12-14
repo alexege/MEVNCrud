@@ -11,39 +11,25 @@ const {
 
 const {
   getAllNotes,
+  getNote,
   createNote,
+  updateNote,
   deleteNote
 } = require('../controllers/note_controller');
 
 router
-  //Users
+  // Users
   .post('/users', createData)
   .get('/users/', readData)
   .get('/users/:id', getUser)
   .put('/users/:id', updateData)
   .delete('/users/:id', deleteData)
 
-  .get('/notes/all', getAllNotes)
+  // Notes
   .post('/notes', createNote)
+  .get('/notes/all', getAllNotes)
+  .get('/notes/:id', getNote)
+  .put('/notes/:id', updateNote)
   .delete('/notes/:id', deleteNote)
  
 module.exports = router;
-
-// const {
-//   createNote,
-//   getAllNotes,
-//   getNote,
-//   updateNote,
-//   deleteNote,
-// } = require('../controllers/note_controller');
-
-// const notesRouter = express.Router();
-
-// notesRouter
-//   .post('/notes', createNote)
-//   .get('/notes/', getAllNotes)
-//   .get('/notes/:id', getNote)
-//   .put('/notes/:id', updateNote)
-//   .delete('/notes/:id', deleteNote)
-
-//   module.exports = notesRouter;
